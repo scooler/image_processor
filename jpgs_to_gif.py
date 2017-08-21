@@ -1,4 +1,4 @@
-from PIL import Image, ImageColor
+from PIL import Image, ImageColor, ImageOps
 import colorsys
 
 IMAGE_SIZE = (430, 430)
@@ -8,8 +8,9 @@ OVERLAY_SIZE = (430, 90)
 FRAME_DURATION = 500 # ms
 
 #d6922d, #d86c27, #1b84c0
-FRAME_COLORS = [(214, 146, 45), (216, 108, 39), (27, 132, 192)]
-COLOR_OVERLAY_ALPHA = 0.4
+# FRAME_COLORS = [(214, 146, 45, 255), (216, 108, 39, 255), (27, 132, 192, 255)]
+FRAME_COLORS = ['#d6922d88', '#d86c2788', '#1b84c088']
+COLOR_OVERLAY_ALPHA = 0.5
 BOTTOM_SPACING = 20
 
 
@@ -42,8 +43,22 @@ def add_overlay(img, overlay):
   return img
 
 def blend_img(img, color):
-  color_img = Image.new('RGB', IMAGE_SIZE, color=color)
-  return Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
+  # color_img = Image.new('RGB', IMAGE_SIZE, color=color)
+  color_img2 = ImageOps.colorize(img.convert('L'), (0, 0, 0), color)
+  return Image.blend(img, color_img2, COLOR_OVERLAY_ALPHA)
+  # return Image.composite(img, color_img2, ImageOps.invert(img.convert('L')))
+  # img2 = Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
+  # col = ImageColor.getcolor(color, 'RGBA')
+  # color_img = Image.new('RGBA', IMAGE_SIZE, color=col)
+  # color_img.show()
+  # img.putalpha(Image.new('1', IMAGE_SIZE, color=1))
+  # img.putalpha(color_img) #, COLOR_OVERLAY_ALPHA)
+
+  # img2 = Image.alpha_composite(img.convert('RGBA'), color_img)
+
+  # return saturate(img2, 2)
+
+  # return img
 
 frame1 = add_overlay(blend_img(read_img('11.png'), FRAME_COLORS[0]), overlay)
 frame2 = add_overlay(blend_img(read_img('22.png'), FRAME_COLORS[1]), overlay)
