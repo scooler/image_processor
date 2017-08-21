@@ -1,4 +1,5 @@
-from PIL import Image
+from PIL import Image, ImageColor
+import colorsys
 
 IMAGE_SIZE = (430, 430)
 OVERLAY_SIZE = (430, 90)
@@ -15,9 +16,26 @@ BOTTOM_SPACING = 20
 overlay = Image.open('group.png')
 overlay = overlay.resize(OVERLAY_SIZE) # SVG original is 600x126, so after scaling 126 * 430 / 600 = 90
 
+
+def saturate(img, ratio):
+  # img = Image.open(filename)
+  ld = img.load()
+  width, height = img.size
+  for y in range(height):
+    for x in range(width):
+      r,g,b = ld[x,y]
+      h,s,v = colorsys.rgb_to_hsv(r/255., g/255., b/255.)
+      # h = (h + -90.0/360.0) % 1.0
+      # s = s**0.65
+      s = s * ratio
+      r,g,b = colorsys.hsv_to_rgb(h, s, v)
+      ld[x,y] = (int(r * 255.9999), int(g * 255.9999), int(b * 255.9999))
+  return img
+
 def read_img(path):
   img = Image.open(path)
-  return img.resize(IMAGE_SIZE)
+  img2 = img.resize(IMAGE_SIZE)
+  return saturate(img2, 0.6)
 
 def add_overlay(img, overlay):
   img.paste(overlay, box=(0, img.height - OVERLAY_SIZE[1] - BOTTOM_SPACING), mask=overlay)
