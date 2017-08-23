@@ -10,7 +10,7 @@ FRAME_DURATION = 500 # ms
 #d6922d, #d86c27, #1b84c0
 # FRAME_COLORS = [(214, 146, 45, 255), (216, 108, 39, 255), (27, 132, 192, 255)]
 FRAME_COLORS = ['#d6922d88', '#d86c2788', '#1b84c088']
-COLOR_OVERLAY_ALPHA = 0.5
+COLOR_OVERLAY_ALPHA = 1
 BOTTOM_SPACING = 20
 
 
@@ -44,7 +44,7 @@ def add_overlay(img, overlay):
 
 def blend_img(img, color):
   # color_img = Image.new('RGB', IMAGE_SIZE, color=color)
-  color_img2 = ImageOps.colorize(img.convert('L'), (0, 0, 0), color)
+  color_img2 = ImageOps.colorize(img.convert('L'), (0, 0, 0), color) # grayscale image on the original, colorized turning white to the input color
   return Image.blend(img, color_img2, COLOR_OVERLAY_ALPHA)
   # return Image.composite(img, color_img2, ImageOps.invert(img.convert('L')))
   # img2 = Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
