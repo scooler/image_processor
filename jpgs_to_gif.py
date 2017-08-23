@@ -45,13 +45,19 @@ def blend_img(img, color):
   color_img = Image.new('RGB', IMAGE_SIZE, color=color)
   return Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
 
-
 frame1 = add_overlay(blend_img(read_img('1.jpg'), FRAME_COLORS[0]), overlay)
 frame2 = add_overlay(blend_img(read_img('2.jpg'), FRAME_COLORS[1]), overlay)
 frame3 = add_overlay(blend_img(read_img('3.jpg'), FRAME_COLORS[2]), overlay)
 frame1.save('out1.png')
 frame2.save('out2.png')
 frame3.save('out3.png')
+
+import imageio
+images = []
+for filename in ['out1.png', 'out2.png', 'out3.png']:
+    images.append(imageio.imread(filename))
+imageio.mimsave('out-io.gif', images, duration=0.5)
+
 
 frame1.save('out.gif', save_all=True, append_images=[frame2, frame3], loop=0, duration=500)
 
