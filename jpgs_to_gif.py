@@ -13,8 +13,8 @@ COLOR_OVERLAY_ALPHA = 0.4
 BOTTOM_SPACING = 20
 
 
-overlay = Image.open('group.png')
-overlay = overlay.resize(OVERLAY_SIZE) # SVG original is 600x126, so after scaling 126 * 430 / 600 = 90
+overlay = Image.open('group-430.png')
+overlay = overlay.resize(IMAGE_SIZE) # SVG original is 600x126, so after scaling 126 * 430 / 600 = 90
 
 
 def saturate(img, ratio):
@@ -38,7 +38,7 @@ def read_img(path):
   return saturate(img2, 0.6)
 
 def add_overlay(img, overlay):
-  img.paste(overlay, box=(0, img.height - OVERLAY_SIZE[1] - BOTTOM_SPACING), mask=overlay)
+  img.paste(overlay, mask=overlay)
   return img
 
 def blend_img(img, color):
