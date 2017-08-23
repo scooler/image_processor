@@ -34,8 +34,8 @@ def saturate(img, ratio):
 
 def read_img(path):
   img = Image.open(path)
-  img2 = img.resize(IMAGE_SIZE)
-  return saturate(img2, 0.6)
+  img2 = img.resize(IMAGE_SIZE).convert('RGB')
+  return saturate(img2, 0.6) # saturation down by 40%
 
 def add_overlay(img, overlay):
   img.paste(overlay, mask=overlay)
