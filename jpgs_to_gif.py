@@ -10,7 +10,7 @@ FRAME_DURATION = 500 # ms
 #d6922d, #d86c27, #1b84c0
 FRAME_COLORS = [(214, 146, 45), (216, 108, 39), (27, 132, 192)]
 # FRAME_COLORS = ['#d6922d88', '#d86c2788', '#1b84c088']
-COLOR_OVERLAY_ALPHA = 1
+COLOR_OVERLAY_ALPHA = 0.5
 BOTTOM_SPACING = 20
 
 
@@ -42,6 +42,9 @@ def add_overlay(img, overlay):
   img.paste(overlay, mask=overlay)
   return img
 
+def fun(x, max):
+  return -abs(x - 127.5)/127.5 + max # it's a linear function with max at (127.5, 1) and "mins" at (0, 0) and (255, 0)
+
 def blend_img(img, color):
   color_img3 = Image.new('RGB', IMAGE_SIZE, color=color)
   ld = img.convert('L').load()
@@ -55,7 +58,7 @@ def blend_img(img, color):
       # print("[x,y] = ",x, y)
       brightness = ld[x, y]
       # print(brightness)
-      img_r, img_g, img_b = colorsys.hsv_to_rgb(h, s, brightness)
+      img_r, img_g, img_b = colorsys.hsv_to_rgb(h, fun(brightness, s), brightness)
       # print(img_r, img_g, img_b)
       # ld[x, y] = (int(img_r * 255.9999), int(img_g * 255.9999), int(img_b * 255.9999))
       img_r = int(img_r)
