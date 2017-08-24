@@ -45,9 +45,9 @@ def blend_img(img, color):
   color_img = Image.new('RGB', IMAGE_SIZE, color=color)
   return Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
 
-frame1 = add_overlay(blend_img(read_img('1.jpg'), FRAME_COLORS[0]), overlay)
-frame2 = add_overlay(blend_img(read_img('2.jpg'), FRAME_COLORS[1]), overlay)
-frame3 = add_overlay(blend_img(read_img('3.jpg'), FRAME_COLORS[2]), overlay)
+frame1 = add_overlay(blend_img(read_img('11.png'), FRAME_COLORS[0]), overlay)
+frame2 = add_overlay(blend_img(read_img('22.png'), FRAME_COLORS[1]), overlay)
+frame3 = add_overlay(blend_img(read_img('55.png'), FRAME_COLORS[2]), overlay)
 frame1.save('out1.png')
 frame2.save('out2.png')
 frame3.save('out3.png')
