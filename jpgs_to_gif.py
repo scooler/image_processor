@@ -8,8 +8,8 @@ OVERLAY_SIZE = (430, 90)
 FRAME_DURATION = 500 # ms
 
 #d6922d, #d86c27, #1b84c0
-# FRAME_COLORS = [(214, 146, 45, 255), (216, 108, 39, 255), (27, 132, 192, 255)]
-FRAME_COLORS = ['#d6922d88', '#d86c2788', '#1b84c088']
+FRAME_COLORS = [(214, 146, 45), (216, 108, 39), (27, 132, 192)]
+# FRAME_COLORS = ['#d6922d88', '#d86c2788', '#1b84c088']
 COLOR_OVERLAY_ALPHA = 1
 BOTTOM_SPACING = 20
 
@@ -43,22 +43,29 @@ def add_overlay(img, overlay):
   return img
 
 def blend_img(img, color):
-  # color_img = Image.new('RGB', IMAGE_SIZE, color=color)
-  color_img2 = ImageOps.colorize(img.convert('L'), (0, 0, 0), color) # grayscale image on the original, colorized turning white to the input color
-  return Image.blend(img, color_img2, COLOR_OVERLAY_ALPHA)
-  # return Image.composite(img, color_img2, ImageOps.invert(img.convert('L')))
-  # img2 = Image.blend(img, color_img, COLOR_OVERLAY_ALPHA)
-  # col = ImageColor.getcolor(color, 'RGBA')
-  # color_img = Image.new('RGBA', IMAGE_SIZE, color=col)
-  # color_img.show()
-  # img.putalpha(Image.new('1', IMAGE_SIZE, color=1))
-  # img.putalpha(color_img) #, COLOR_OVERLAY_ALPHA)
-
-  # img2 = Image.alpha_composite(img.convert('RGBA'), color_img)
-
-  # return saturate(img2, 2)
-
-  # return img
+  color_img3 = Image.new('RGB', IMAGE_SIZE, color=color)
+  ld = img.convert('L').load()
+  color_ld = color_img3.load()
+  width, height = img.size
+  r, g, b = color
+  h, s, v = colorsys.rgb_to_hsv(r, g, b)
+  # print(h, s, v)
+  for y in range(height):
+    for x in range(width):
+      # print("[x,y] = ",x, y)
+      brightness = ld[x, y]
+      # print(brightness)
+      img_r, img_g, img_b = colorsys.hsv_to_rgb(h, s, brightness)
+      # print(img_r, img_g, img_b)
+      # ld[x, y] = (int(img_r * 255.9999), int(img_g * 255.9999), int(img_b * 255.9999))
+      img_r = int(img_r)
+      img_g = int(img_g)
+      img_b = int(img_b)
+      # print(img_r, img_g, img_b)
+      color_ld[x, y] = (img_r, img_g, img_b)
+  # color_img3.show()
+  return Image.blend(img, color_img3, COLOR_OVERLAY_ALPHA)
+  # return Image.blend(Image.composite(img, color_img3, img.convert('L')), color_img3, COLOR_OVERLAY_ALPHA)
 
 frame1 = add_overlay(blend_img(read_img('11.png'), FRAME_COLORS[0]), overlay)
 frame2 = add_overlay(blend_img(read_img('22.png'), FRAME_COLORS[1]), overlay)
