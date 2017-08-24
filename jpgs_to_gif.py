@@ -74,6 +74,3 @@ for filename in ['out1.png', 'out2.png', 'out3.png']:
 imageio.mimsave('out-io.gif', images, duration=0.5)
 
 
-frame1.save('out.gif', save_all=True, append_images=[frame2, frame3], loop=0, duration=500)
-
-
